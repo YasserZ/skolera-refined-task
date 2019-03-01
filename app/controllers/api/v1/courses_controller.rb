@@ -79,13 +79,22 @@ module Api
       end
 
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_course
-        @course = Course.find(params[:id])
+        begin
+          @course = Course.find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+          render json: {message: "Error!", body: "Course not found!"}, :status => 404
+          # rescue RecordInvalid
+        end
       end
 
       # Only allow a trusted parameter "white list" through.
       def course_params
+        unless params[:course].present?
+          render json: {message: "Error!", body: "Parameter missing!"}, :status => 404
+        end
         params.require(:course).permit(:name, :code, :teacher_id)
       end
     end
