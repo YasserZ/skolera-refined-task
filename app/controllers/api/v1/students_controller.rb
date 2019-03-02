@@ -18,21 +18,31 @@ module Api
 
       # POST /students
       def create
-        @student = Student.new(student_params)
+        begin
+          @student = Student.new(student_params)
 
-        if @student.save
-          render json: StudentSerializer.new(@student).serialized_json, status: :created
-        else
-          render json: @student.errors, status: :unprocessable_entity
+          if @student.save
+            render json: StudentSerializer.new(@student).serialized_json, status: :created
+          else
+            render json: @student.errors, status: :unprocessable_entity
+          end
+        rescue ActionController::ParameterMissing, ActionController::ArgumentError => e
+          render json: {status: 400, error: "Bad Request", body: e.message}, :status => 400
+
         end
       end
 
       # PATCH/PUT /students/1
       def update
-        if @student.update(student_params)
-          render json: @student
-        else
-          render json: @student.errors, status: :unprocessable_entity
+        begin
+          if @student.update(student_params)
+            render json: @student
+          else
+            render json: @student.errors, status: :unprocessable_entity
+          end
+        rescue ActionController::ParameterMissing, ActionController::ArgumentError => e
+          render json: {status: 400, error: "Bad Request", body: e.message}, :status => 400
+
         end
       end
 
@@ -44,7 +54,12 @@ module Api
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_student
-        @student = Student.find(params[:id])
+        begin
+          @student = Student.find(params[:id])
+        rescue ActiveRecord::RecordNotFound => e
+          render json: {status: 404, error: "Not Found", body: e.message}, :status => 404
+
+        end
       end
 
       # Only allow a trusted parameter "white list" through.
