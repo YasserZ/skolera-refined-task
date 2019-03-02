@@ -13,7 +13,7 @@ Things you may want to cover:
 
 ## Issued faced
 
-* The Devise gem provided in the task actually didn't work with a Rails API Project, i guess it was intended for regular projects, so i used [devise-token-auth](https://github.com/lynndylanhurley/devise_token_auth) instead.
+* The Devise gem provided in the task actually didn't work with a Rails API Project, I guess it was intended for regular projects, so i used [devise-token-auth](https://github.com/lynndylanhurley/devise_token_auth) instead.
 
 
 ## Background Workers
@@ -22,6 +22,10 @@ Things you may want to cover:
 Export users to csv file using sidekiq.
 Exported file is stored in 'app/exports/users.csv' using a BG job and replying with a successfully added to queue message.
 ```
+
+## Live Version:
+
+Deployed version to Heroku can be found [here](http://skolera-refined-task.herokuapp.com).
 
 ## Endpoints
 * Authentication:
@@ -80,3 +84,5 @@ DELETE /api/v1/courses/:id(.:format)                                            
 ```
 GET    /api/v1/users(.:format)                                                                  api/v1/users#index
 ```
+
+
